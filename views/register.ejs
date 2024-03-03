@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>From one mom to another</title>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
+    <link rel="stylesheet" href="/styles/index.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/index.css" />
+  </head>
+  <body>
+    <div class="wrapper about-wrapper">
+      <header>
+        <div class="header-left">
+          <a href="/index.ejs"
+            ><img class="logo-img" src="/images/logo.png" alt="Logo"
+          /></a>
+        </div>
+        <a href="#" class="toggle-btn">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </a>
+        <div class="header-right">
+          <nav class="header-nav">
+            <ul class="header-ul">
+              <li class="header-list">
+                <a href="/index" class="header-link">Home</a>
+              </li>
+              <li class="header-list">
+                <a href="/about" class="header-link">About</a>
+              </li>
+              <li class="header-list">
+                <a href="/admin-login" class="header-link">Admin</a>
+              </li>
+              <li class="header-list">
+                <a
+                  href="/register"
+                  class="btn header-link register btn-header-cta"
+                  >Register</a
+                >
+              </li>
+              <li class="header-list">
+                <a href="/login" class="btn header-link login btn-header-cta"
+                  >Login</a
+                >
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <div class="form-box">
+        <h2 style="text-align: center">Sign up below</h2>
+        <form
+          action="/register"
+          method="POST"
+          class="responsive-form"
+          id="registerForm"
+        >
+          <label for="text">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            required
+            placeholder="Please enter your username"
+          />
+          <!-- <div class="email-error"></div> -->
+
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            placeholder="Enter password"
+          />
+          <div class="password-error"></div>
+          <br />
+          <input class="btn-header-cta" type="submit" value="Submit" />
+        </form>
+      </div>
+      <footer>
+        <div class="footer-div footer-left">
+          <p>Follow Us</p>
+          <div class="follow-div">
+            <ul class="follow-icons">
+              <li>
+                <a href="#" class="footer-nav"
+                  ><i class="fab-custom fab fa-facebook-f"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" class="footer-nav"
+                  ><i class="fab-custom fab fa-instagram"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" class="footer-nav"
+                  ><i class="fab-custom fab fa-twitter"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" class="footer-nav"
+                  ><i class="fab-custom fab fa-linkedin"></i
+                ></a>
+              </li>
+              <li>
+                <a href="#" class="footer-nav"
+                  ><i class="fab-custom fab fa-youtube"></i
+                ></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-div footer-mid">
+          <ul>
+            <li><a href="#" class="footer-nav"> About Us</a></li>
+            <li><a href="#" class="footer-nav">Diversity Pledge</a></li>
+            <li><a href="#" class="footer-nav">EU Privacy</a></li>
+          </ul>
+        </div>
+        <div class="footer-div footer-right">
+          <ul>
+            <li><a href="#" class="footer-nav">Privacy Policy</a></li>
+            <li><a href="#" class="footer-nav">Terms of Services</a></li>
+            <li><a href="#" class="footer-nav">Advertise</a></li>
+          </ul>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      const form = document.querySelector("form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const username = form.username.value;
+        const password = form.password.value;
+        console.log("Username:", username);
+        console.log("Password:", password);
+        try {
+          const response = await fetch("/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password }),
+            credentials: "same-origin",
+          });
+
+          if (!response.ok) {
+            throw new Error(`Server responded with status ${response.status}`);
+          }
+
+          const data = await response.json();
+          if (data.success) {
+            alert(data.message);
+            form.reset();
+
+            window.location.href = "/login";
+          } else {
+            console.error("Registration failed:", data.message);
+          }
+        } catch (error) {
+          console.error(
+            "An error occurred during registration:",
+            error.message
+          );
+        }
+      });
+    </script>
+  </body>
+</html>
